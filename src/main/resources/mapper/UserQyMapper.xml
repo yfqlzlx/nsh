@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.yf.qy.mapper.UserQyMapper">
+
+    <select id="getAllQyWithState" resultType="org.yf.qy.vo.QyVo">
+        select
+          q.data_id,
+          q.condition,
+          q.level,
+          q.location,
+          q.name,
+          q.reward,
+          q.ext1 as subTitle,
+          ifnull(uq.ext1,'0') as state
+        from
+          user u
+        left join
+          user_qy uq
+        on
+          u.id = uq.user_id
+        left join
+          qy q
+        on
+          q.id = uq.qy_id
+        where
+          u.id = #{userId}
+        order by qy.id
+    </select>
+    <select id="queryAll" resultType="org.yf.qy.vo.QyVo">
+        select
+               q.data_id,
+               q.condition,
+               q.level,
+               q.location,
+               q.name,
+               q.reward,
+               q.ext1 as subTitle,
+               ifnull(uq.ext1,'0') as state
+        from
+             user u
+         left join
+             user_qy uq
+         on
+             u.id = uq.user_id
+         left join
+             qy q
+         on
+             q.id = uq.qy_id
+        where
+            u.id = #{userId}
+        <where>
+            <if test="param.level != null and param.level != ''">
+                and q.level = #{param.level}
+            </if>
+            <if test="">
+
+            </if>
+        </where>
+        order by qy.id
+    </select>
+</mapper>

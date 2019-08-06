@@ -18,44 +18,17 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Qy implements Serializable {
+public class UserQy implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     @TableId
     private long id;
-    /**
-     * 网易奇遇的id
-     */
-    private Integer dataId;
+    private Long userId;
+
+    private Long qyId;
 
     /**
-     * 奇遇名称
-     */
-    private String name;
-
-    /**
-     * 奇遇等级
-     */
-    private String level;
-
-    /**
-     * 奇遇地点
-     */
-    private String location;
-
-    /**
-     * 触发条件
-     */
-    private String condition;
-
-    /**
-     * 完成奖励
-     */
-    private String reward;
-
-    /**
-     * 副标题
+     * 当作标记状态使用
      */
     private String ext1;
 
