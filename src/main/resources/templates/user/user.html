@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script src="/static/layui/layui.all.js"></script>
+    <script src="/static/layui/js/common.js"></script>
+</head>
+<body>
+    <table id="dataTable" lay-filter="dataTable"></table>
+</body>
+<script>
+    layui.use(['element','jquery','form'], function() {
+        let $ = layui.jquery;
+        let form = layui.form;
+        let table = layui.table;
+
+        let tablelns = table.render({
+            elem: '#dataTable'
+            ,id: 'dataTable'
+            ,url: '/api/user/all'
+            ,method: 'GET'
+            ,response: {
+                statusName: 'code'
+                ,statusCode: 200
+                ,dataName: 'data'
+                ,countName: 'totalSize'
+            }
+            ,page: true
+            ,cols: [
+                [
+                    {field: 'id', title: 'ID'}
+                    ,{field: 'username', title: '用户名'}
+                    ,{field: 'password', title: '密码'}
+                    ,{field: 'createTime', title: '注册时间'}
+                ]
+            ]
+        });
+    })
+</script>
+</html>
