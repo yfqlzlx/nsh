@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>更新</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script src="/static/layui/layui.all.js"></script>
+    <script src="/static/layui/js/common.js"></script>
+</head>
+<body>
+    <div id="info">
+
+    </div>
+<div style="margin-top: 30px;margin-left: 30px">
+    <button type="button" class="layui-btn" id="update">更新</button>
+</div>
+</body>
+
+<script>
+
+    let $;
+    layui.use(['jquery'], function () {
+        $ = layui.jquery;
+
+        updateInfo();
+
+        /**
+         * 更新显示数据
+         */
+        function updateInfo() {
+            $.ajax({
+                url: '/api/qy/info'
+                , method: 'get'
+                , contentType: "application/json;charset=UTF-8"
+                , async: false
+                , success: function (response) {
+                    if(response.code !== 200){
+                        layer.alert("错误  "+ response.message)
+                        return ;
+                    }
+                    let info = $('#info');
+                    info.innerHTML = '';
+                    if (response.data) {
+                        info.html('最新版本号：' + response.data.version + '   更新时间：' + response.data.createtime + '   新增：' + response.data.adds + '条   更新：' + response.data.modifyed + '条')
+                    }
+                }
+            })
+        }
+        
+        $('#update').click(function () {
+            layer.msg("更新需要时间，大约需要15秒，请耐心等待")
+            $.ajax({
+                url: '/api/qy/update'
+                , method: 'put'
+                , contentType: "application/json;charset=UTF-8"
+                , async: false
+                , success: function (response) {
+                    if(response.code !== 200){
+                        layer.alert("错误  "+ response.message)
+                    }else{
+                        layer.alert('更新成功');
+                        updateInfo();
+                    }
+                }
+            })
+        })
+
+
+    })
+
+
+
+</script>
+</html>

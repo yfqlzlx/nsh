@@ -2,8 +2,10 @@ package org.yf.qy.entity;
 
 import java.time.LocalDate;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -30,7 +32,8 @@ public class User implements Serializable {
 
     private String password;
 
-    private LocalDate createtime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createtime;
 
     private String ext1;
 

@@ -7,13 +7,13 @@
     <script src="/static/layui/layui.all.js"></script>
     <style>
         body{
-            /*background: url('/static/img/login_back.jpg') no-repeat fixed;*/
+            background: url('/static/img/login_back.jpg') no-repeat fixed;
             background-size: cover;
         }
         .login-form{
-            background-color: #ff9033;
+            background-color: #8f8f8f;
             width:400px;
-            height: 330px;
+            height: 200px;
             border-radius: 10px;
             margin-top: 200px;
             margin-left: 520px;
@@ -47,13 +47,8 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <div class="layui-input-block" style="width: 200px">
-                <img src="/api/user/validImg" class="login-valid" id="vaild-src"/>
-            </div>
-        </div>
-        <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="login" style="background-color:#ff2020;width: 200px">登录</button>
+                <button class="layui-btn" lay-submit lay-filter="login" style="background-color:#ffa621;width: 200px">登录</button>
             </div>
         </div>
         <div class="layui-form-item">
@@ -96,7 +91,6 @@
                         // 判断之前有无网址
                         let uri = layui.sessionData('urls').uri;
                         if(uri){
-                            console.log("跳转到uri:" + uri)
                             layui.sessionData('urls',{
                                 key: 'uri'
                                 ,remove: true
@@ -104,7 +98,6 @@
                             window.location.href = uri;
                         }else{
                             window.location.href = '../index.html'
-                            console.log("跳转到主页")
                         }
                     }else{
                         layer.alert('未知异常')
@@ -128,7 +121,6 @@
                 ,resize: false
                 ,content: $('#regist-div')
                 ,success: function () {
-                    console.log("打开成功")
                 }
             })
         });
@@ -147,7 +139,6 @@
                     if(response.code === 405){
                         layer.alert("该账号已经存在");
                     }else if(response.code === 200){
-                        console.log("注册成功");
                         $('#closeBtn').click();
                         layer.closeAll();
                         layer.msg("注册成功");

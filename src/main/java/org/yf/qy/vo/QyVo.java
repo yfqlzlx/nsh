@@ -1,9 +1,12 @@
 package org.yf.qy.vo;
 
+import lombok.Data;
+
 /**
  * @author yfqlzlx
  * @date 2019/8/6 16:30
  */
+@Data
 public class QyVo {
     private Integer dataId;
 
@@ -25,7 +28,7 @@ public class QyVo {
     /**
      * 触发条件
      */
-    private String condition;
+    private String conditions;
 
     /**
      * 完成奖励

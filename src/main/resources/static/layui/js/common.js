@@ -9,3 +9,16 @@
         });
     }
 })();
+
+
+function getUser(){
+    let user = layui.sessionData('userStore').user;
+    return user.id;
+}
+
+function removeUser() {
+    layui.sessionData('userStore',{
+        key: 'user',
+        remove: true
+    })
+}

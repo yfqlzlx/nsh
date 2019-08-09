@@ -5,4 +5,7 @@
     <select id="getMaxVersion" resultType="java.lang.Integer">
         select max(version) from update_log
     </select>
+    <select id="info" resultType="org.yf.qy.entity.UpdateLog">
+        select * from update_log where id = (select max(id) from update_log where state = true)
+    </select>
 </mapper>

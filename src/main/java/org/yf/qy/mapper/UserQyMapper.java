@@ -19,7 +19,6 @@ import java.util.Map;
  */
 public interface UserQyMapper extends BaseMapper<UserQy> {
 
-    List<QyVo> getAllQyWithState(IPage page,@Param("userId") long userId);
 
-    List<QyVo> queryAll(IPage page, @Param("userId") long userId, @Param("param") Map<String, Object> param);
+    IPage<QyVo> queryAll(IPage page, @Param("userId") long userId, @Param("param") Map<String, Object> param);
 }

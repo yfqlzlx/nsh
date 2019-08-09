@@ -47,7 +47,7 @@ public class Qy implements Serializable {
     /**
      * 触发条件
      */
-    private String condition;
+    private String conditions;
 
     /**
      * 完成奖励

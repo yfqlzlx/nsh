@@ -16,10 +16,10 @@
             <li class="layui-nav-item">
                 <a href="javascript:">
                     <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    用户
+                    <span id="username-span"></span>
                 </a>
             </li>
-            <li class="layui-nav-item"><a href="">退出</a></li>
+            <li class="layui-nav-item"><a onclick="logout()">退出</a></li>
         </ul>
     </div>
 
@@ -30,13 +30,17 @@
                     <a onclick="jump('user/user.html')">用户管理</a>
                 </li>
                 <li class="layui-nav-item">
-                    <a onclick="jump('order/order.html')">奇遇管理</a>
+                    <a onclick="jump('qy/qy.html')">奇遇管理</a>
                 </li>
                 <li class="layui-nav-item">
-                    <a onclick="jump('order/order.html')">商品管理</a>
+                    <a onclick="jump('update/update.html')">更新</a>
                 </li>
             </ul>
         </div>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <iframe id="container" lay-filter="container" style="width: 100%;height: 100%"></iframe>
     </div>
     <div class="layui-footer">
         <!-- 底部固定区域 -->
@@ -50,6 +54,7 @@
         element = layui.element;
         $ = layui.$
         element.render('nav', 'left-nav');
+        $('#username-span').html(getUser().username)
     });
 
     /**
@@ -59,6 +64,14 @@
     function jump(url){
         $('#container').attr('src',url);
         element.init();
+    }
+
+    /**
+     * 退出登录
+     */
+    function logout(){
+        removeUser();
+        window.location.href='login/login.html'
     }
 </script>
 </body>

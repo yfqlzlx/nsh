@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script src="/static/layui/layui.all.js"></script>
+    <script src="/static/layui/js/common.js"></script>
+</head>
+
+<body>
+<form class="layui-form" action="" id="search-form">
+    <div class="layui-form-item" style="margin-top: 20px;">
+        <div class="layui-inline">
+            <label class="layui-form-label">等级</label>
+            <div class="layui-input-inline" style="width: 200px;">
+                <select name="level" lay-verify="">
+                    <option value="">请选择一个等级</option>
+                    <option value="0">隐藏</option>
+                    <option value="1">小吉</option>
+                    <option value="2">中吉</option>
+                    <option value="3">大吉</option>
+                    <option value="4">旷世</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">标记</label>
+            <div class="layui-input-inline" style="width: 200px;">
+                <select name="mark" lay-verify="">
+                    <option value="">请选择是否标记</option>
+                    <option value="0">未标记</option>
+                    <option value="1">已标记</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="userId" value="" id="userId"/>
+    <div class="layui-form-item">
+        <div class="layui-inline interval" style="margin-top: 20px;margin-left: 20px;">
+            <button type="button" 	class="layui-btn layui-btn-normal" lay-filter="search" lay-submit>搜索</button>
+            <button type="button" class="layui-btn" id="mark-all">一键标记</button>
+            <button type="button" class="layui-btn layui-btn-warm" id="unmark-all">一键取消</button>
+            <button type="reset" class="layui-btn layui-btn-primary" id="reset">重置</button>
+        </div>
+    </div>
+</form>
+
+<table id="dataTable" lay-filter="dataTable"></table>
+</body>
+
+<script>
+    layui.use(['element', 'jquery', 'form'], function () {
+        let $ = layui.jquery;
+        let form = layui.form;
+        let table = layui.table;
+        let ids = [];
+        form.render();
+        // 设置登录的userId
+        $('#userId').val(getUser().id);
+        let tablelns = table.render({
+            elem: '#dataTable'
+            ,id: 'dataTable'
+            ,url: '/api/qy/query'
+            , contentType: "application/json;charset=UTF-8"
+            ,method: 'post'
+            ,response: {
+                statusName: 'code'
+                ,statusCode: 200
+                ,dataName: 'data'
+                ,countName: 'totalSize'
+            }
+            ,where:{
+                userId: getUser().id
+            }
+            ,page: true
+            ,cols: [
+                [
+                    {field: 'name', title: '奇遇名'}
+                    ,{field: 'subTitle', title: '副标题'}
+                    ,{field: 'type', title: '类型', templet: function (d) {
+                        if("0" === d.level){
+                            return "隐藏";
+                        }
+                        if("1" === d.level){
+                            return "小吉";
+                        }
+                        if("2" === d.level){
+                            return "中吉";
+                        }
+                        if("3" === d.level){
+                            return "大吉";
+                        }
+                        if("4" === d.level){
+                            return "旷世";
+                        }
+                        return "未知";
+                    }}
+                    ,{field: 'location', title: '地点'}
+                    ,{field: 'conditions', title: '条件'}
+                    ,{field: 'reward', title: '奖励'}
+                    ,{fixed: 'right',title: '操作', width:150, align:'center', toolbar: '#delBar'}
+                ]
+            ]
+            ,done: function(res, curr, count){
+                ids = [];
+                let datas = res.data;
+                for(let i=0;i<datas.length;i++){
+                    ids.push(datas[i].dataId);
+                }
+            }
+        });
+
+        /**
+         * 工具条
+         */
+        table.on('tool(dataTable)',function (obj){
+            let event = obj.event;
+            if('mark' === event){
+                // 标记
+                $.ajax({
+                    url: '/api/qy/mark/' + obj.data.dataId + "/" + getUser().id
+                    ,method: 'put'
+                    ,contentType: "application/json;charset=UTF-8"
+                    ,async:false
+                    ,success: function(){
+                        layer.msg("标记成功");
+                        tableRender();
+                    }
+                });
+                return;
+            }
+            if('unmark' === event){
+                $.ajax({
+                    url: '/api/qy/unmark/' + obj.data.dataId + "/" + getUser().id
+                    ,method: 'put'
+                    ,contentType: "application/json;charset=UTF-8"
+                    ,async:false
+                    ,success: function(){
+                        layer.msg("取消标记成功");
+                        tableRender();
+                    }
+                });
+            }
+        });
+
+
+        /**
+         * 按条件搜索
+         */
+        form.on('submit(search)',function (data) {
+            tablelns.reload({
+                url: '/api/qy/query'
+                ,method: 'post'
+                ,contentType: "application/json;charset=UTF-8"
+                // ,async:false
+                ,where:{
+                    extra : JSON.stringify(data.field)
+                }
+                ,done: function(res, curr, count){
+                    ids = [];
+                    let datas = res.data;
+                    for(let i=0;i<datas.length;i++){
+                        ids.push(datas[i].dataId);
+                    }
+                }
+            })
+        });
+
+
+
+
+        /**
+         * 重载table
+         */
+        function tableRender() {
+            let level = $('[name="level"]').val();
+            let mark = $('[name="mark"]').val();
+            let param = {};
+            param.level = level;
+            param.mark = mark;
+            param.userId = getUser().id;
+            table.reload('dataTable',{
+                url: '/api/qy/query'
+                ,where:{
+                    extra: param
+                }
+                ,done: function(res, curr, count){
+                    ids = [];
+                    let datas = res.data;
+                    for(let i=0;i<datas.length;i++){
+                        ids.push(datas[i].dataId);
+                    }
+                }
+            })
+        }
+
+
+        /**
+         * 标记全部
+         */
+        $('#mark-all').click(function () {
+            $.ajax({
+                url: '/api/qy/mark/all'
+                ,method: 'put'
+                ,contentType: "application/json;charset=UTF-8"
+                // ,async:false
+                ,data:JSON.stringify({
+                    ids: ids,
+                    userId: getUser().id
+                })
+                ,success: function(){
+                    layer.msg("全部标记成功");
+                    tableRender();
+                }
+            });
+        });
+
+        /**
+         * 取消标记全部
+         */
+        $('#unmark-all').click(function () {
+            $.ajax({
+                url: '/api/qy/unmark/all'
+                ,method: 'put'
+                ,contentType: "application/json;charset=UTF-8"
+                // ,async:false
+                ,data:JSON.stringify({
+                    ids: ids,
+                    userId: getUser().id
+                })
+                ,success: function(){
+                    layer.msg("全部取消成功");
+                    tableRender();
+                }
+            });
+        })
+        
+        
+    })
+
+</script>
+
+<script type="text/html" id="delBar">
+    {{#  if(d.state === '0'){ }}
+        <a class="layui-btn layui-btn-sm" lay-event="mark">标记</a>
+    {{#  } else { }}
+        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="unmark">取消</a>
+    {{#  } }}
+</script>

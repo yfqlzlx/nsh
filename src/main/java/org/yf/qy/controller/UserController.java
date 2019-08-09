@@ -40,9 +40,9 @@ public class UserController {
             return new Response(405,"已存在");
         }
         if(userService.registry(user)){
-            return new Response(500);
+            return new Response(200);
         }
-        return new Response(200);
+        return new Response(500);
     }
 
     @GetMapping(value = "/all")

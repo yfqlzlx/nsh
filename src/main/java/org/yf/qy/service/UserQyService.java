@@ -20,15 +20,16 @@ import java.util.Map;
  */
 public interface UserQyService extends IService<UserQy> {
 
-    void mark(long id, long userId);
+    void mark(Long id, Long userId);
 
-    void unMark(long id,long userId);
+    void unMark(Long id,Long userId);
 
-    void markBatch(List<Long> ids,long userId);
+    void markBatch(List<Long> ids,Long userId);
 
     void unMarkBatch(List<Long> ids,long userId);
 
-    List<QyVo> getAll(long userId, IPage page);
 
-    List<QyVo> query(long userId, Map<String,Object> param,IPage page);
+    Response query(Map<String,Object> param);
+
+    Object info();
 }

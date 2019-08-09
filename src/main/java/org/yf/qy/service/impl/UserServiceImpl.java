@@ -12,6 +12,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.yf.qy.vo.Response;
 
+import java.time.LocalDateTime;
+
 /**
  * <p>
  *  服务实现类
@@ -39,6 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean registry(User user) {
+        user.setCreatetime(LocalDateTime.now());
         return userMapper.insert(user) > 0;
     }
 

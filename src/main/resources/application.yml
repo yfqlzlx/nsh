@@ -4,11 +4,13 @@ server:
 spring:
   datasource:
     username: root
-    password: mysql!@#$1234
-    url: jdbc:mysql://118.24.197.243:3306/nsh?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+    password: zwtwoshichaoren
+    url: jdbc:mysql://localhost:3306/nsh?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   file: error.txt
   path: D:/log

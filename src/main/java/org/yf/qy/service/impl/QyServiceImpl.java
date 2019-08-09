@@ -64,12 +64,14 @@ public class QyServiceImpl extends ServiceImpl<QyMapper, Qy> implements QyServic
         }catch (Exception e){
             log.setReason(e.getMessage());
             log.setState(false);
+            e.printStackTrace();
             throw new Exception("更新失败");
         }
         // 保存到更新表
-        log.setAdd(insert);
+        log.setAdds(insert);
         log.setModifyed(update);
-        log.setVersion(updateLogMapper.getMaxVersion()+1);
+        Integer maxVersion = updateLogMapper.getMaxVersion();
+        log.setVersion(maxVersion== null?0:maxVersion+1);
         updateLogMapper.insert(log);
     }
 
@@ -110,7 +112,7 @@ public class QyServiceImpl extends ServiceImpl<QyMapper, Qy> implements QyServic
             // 附标题
             qy.setExt1(arr.get(5).toString());
             // 触发条件
-            qy.setCondition(arr.get(6).toString());
+            qy.setConditions(arr.get(6).toString());
             // 奖励
             qy.setReward(arr.get(7).toString());
             ret.add(qy);
